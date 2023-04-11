@@ -1,0 +1,77 @@
+# Documentation
+# @see https://grafana.com/docs/tempo/latest/configuration/
+
+# Tempo uses the Weaveworks/common server
+# @see https://grafana.com/docs/tempo/latest/configuration/#server
+server:
+  # HTTP server listen port
+  # (default: 80)
+  http_listen_port: 3200
+
+# Distributor config block
+# @see https://grafana.com/docs/tempo/latest/configuration/#distributor
+distributor:
+  # Receiver configuration for different protocols.
+  # Config is passed down to OpenTelemetry receivers
+  receivers:
+    zipkin:
+
+# The ingester is responsible for batching up traces and pushing them to TempoDB
+# @see https://grafana.com/docs/tempo/latest/configuration/#ingester
+ingester:
+  # Maximum size of a block before cutting it
+  # (default: 1073741824 = 1 GB)
+  max_block_bytes: 100_000
+
+  # Maximum length of time before cutting a block
+  # (default: 1h)
+  max_block_duration: 1m
+
+# Compactors stream blocks from the storage backend, combine them and write them back
+# @see https://grafana.com/docs/tempo/latest/configuration/#compactor
+compactor:
+  compaction:
+    # Optional. Maximum size of a compacted block in bytes
+    # (default: 107374182400 = 100 GB)
+    max_block_bytes: 1073741824 # 1 GB
+
+    # Per-user block retention. If this value is set to 0, then block_retention in the compactor configuration is used
+    # (default: 0)
+    block_retention: 1h
+
+# Tempo supports Amazon S3, GCS, Azure, and local file system for storage
+# @see https://grafana.com/docs/tempo/latest/configuration/#storage
+storage:
+  trace:
+    # The storage backend to use
+    # Should be one of "gcs", "s3", "azure" or "local"
+    # CLI flag -storage.trace.backend
+    backend: local
+
+    # block configuration
+    block:
+      # Bloom filter false positive rate. Lower values create larger filters but fewer false positives
+      # (default: .01)
+      bloom_filter_false_positive: .05
+
+      # Number of bytes per index record
+      # (default: 1MiB)
+      index_downsample_bytes: 1000
+
+    wal:
+      # Where to store the head blocks while they are being appended to
+      path: /tmp/tempo/wal
+
+    local:
+      path: /tmp/tempo/blocks
+
+    # The worker pool is used primarily when finding traces by id, but is also used by other
+    pool:
+      # Total number of workers pulling jobs from the queue
+      # (default: 50)
+      max_workers: 100
+
+# Tempo search can be enabled by the following top-level setting.
+# In microservices mode, it must be set for the distributors and queries
+# @see https://grafana.com/docs/tempo/latest/configuration/#search
+search_enabled: true

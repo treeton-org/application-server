@@ -1,0 +1,70 @@
+# Documentation
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html
+
+[database]
+# The path to the database directory
+# Default: ""
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--databasedirectory
+directory = /arango/db
+
+
+[server]
+# Endpoint for client requests
+# Default: "tcp://0.0.0.0:8529"
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--serverendpoint
+endpoint = tcp://[::]:8529
+
+# Whether to use authentication for all client requests
+# Default: true
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--serverauthentication
+authentication = false
+
+
+[log]
+# Set the topic-specific log leve
+# Available log levels: fatal, error, warning, info, debug, trace
+# Default: ["info","info"]
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--loglevel
+level = mmap=info
+level = performance=info
+level = warning
+
+# Log destination
+# Default: []
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--logoutput
+output = +
+
+
+[rocksdb]
+# The size of block cache (in bytes)
+# Default: dynamic (e.g. 19605808742)
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--rocksdbblock-cache-size
+# 6 GiB = 6 * 2 ^ 30 bytes = 6442450944 bytes
+block-cache-size = 6442450944
+
+# The maximum total size of in-memory write buffers (0 = unbounded)
+# Default: dynamic (e.g. 26141078323)
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--rocksdbtotal-write-buffer-size
+# 6 GiB = 6 * 2 ^ 30 bytes = 6442450944 bytes
+total-write-buffer-size = 6442450944
+
+# If enabled, strictly enforces the block cache size limit
+# Default: false
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--rocksdbenforce-block-cache-size-limit
+enforce-block-cache-size-limit = true
+
+
+[query]
+# The memory threshold per AQL query
+# Default: dynamic (e.g. 40500107673)
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--querymemory-limit
+# 10 MiB = 100 * 2 ^ 20 bytes = 104857600 bytes
+memory-limit = 104857600
+
+
+[cache]
+# The global size limit for all caches (in bytes)
+# Default: dynamic (e.g. 16338173952)
+# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--cachesize
+# 3 GiB = 6 * 2 ^ 30 bytes = 3221225472 bytes
+size = 3221225472

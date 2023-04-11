@@ -1,0 +1,125 @@
+version: "3.9"
+services:
+  #############
+  ## Traefik ##
+  #############
+  traefik:
+    image: traefik:v2.9.8
+    container_name: traefik
+    restart: always
+    networks:
+      - traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./docker/traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./docker/traefik/provider.yaml:/etc/traefik/provider.yaml:ro
+      - ./.htpasswd:/etc/.htpasswd
+      - traefik-acme:/etc/traefik/acme
+      - traefik-log:/var/log/traefik
+    command:
+      - "--certificatesResolvers.letsEncrypt.acme.email=${TRAEFIL_ACME_EMAIL}"
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.traefik.rule=Host(`${TRAEFIK_DOMAIN}`)
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.middlewares=auth@file
+      - traefik.http.routers.traefik.entryPoints=http
+
+      - traefik.http.routers.traefikHttps.rule=Host(`${TRAEFIK_DOMAIN}`)
+      - traefik.http.routers.traefikHttps.service=api@internal
+      - traefik.http.routers.traefikHttps.middlewares=auth@file
+      - traefik.http.routers.traefikHttps.entryPoints=https
+      - traefik.http.routers.traefikHttps.tls.certResolver=letsEncrypt
+
+      - traefik.http.routers.traefikMetrics.rule=Host(`${TRAEFIK_METRICS_DOMAIN}`)
+      - traefik.http.routers.traefikMetrics.service=prometheus@internal
+      - traefik.http.routers.traefikMetrics.middlewares=auth@file
+      - traefik.http.routers.traefikMetrics.entryPoints=http
+
+      - traefik.http.routers.traefikMetricsHttps.rule=Host(`${TRAEFIK_METRICS_DOMAIN}`)
+      - traefik.http.routers.traefikMetricsHttps.service=prometheus@internal
+      - traefik.http.routers.traefikMetricsHttps.middlewares=auth@file
+      - traefik.http.routers.traefikMetricsHttps.entryPoints=https
+      - traefik.http.routers.traefikMetricsHttps.tls.certResolver=letsEncrypt
+
+
+  ##############
+  ## Arangodb ##
+  ##############
+  arangodb:
+    image: arangodb:3.10.5
+    container_name: arangodb
+    restart: always
+    networks:
+      - traefik
+    environment:
+      - ARANGO_NO_AUTH=1 # Use HTTP Base auth traefik middleware
+      - ARANGO_ROOT_PASSWORD=${ARANGO_ROOT_PASSWORD}
+      - ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY=${ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY}
+    volumes:
+      - ./docker/arango/config:/arango/config:ro
+      - ./docker/arango/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+      - arangodb3:/var/lib/arangodb3
+      - arangodb-data:/arango/db
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.arangodb.rule=Host(`${ARANGO_DOMAIN}`)
+      - traefik.http.routers.arangodb.service=arangodb
+      - traefik.http.routers.arangodb.middlewares=auth@file
+      - traefik.http.routers.arangodb.entryPoints=http
+
+      - traefik.http.routers.arangodbHttps.rule=Host(`${ARANGO_DOMAIN}`)
+      - traefik.http.routers.arangodbHttps.service=arangodb
+      - traefik.http.routers.arangodbHttps.middlewares=auth@file
+      - traefik.http.routers.arangodbHttps.entryPoints=https
+      - traefik.http.routers.arangodbHttps.tls.certResolver=letsEncrypt
+
+      - traefik.http.services.arangodb.loadbalancer.server.port=8529
+
+
+  #############
+  ## Grafana ##
+  #############
+  tempo:
+    image: grafana/tempo:1.5.0
+    container_name: tempo
+    restart: always
+    command:
+      - "-config.file=/etc/tempo.yaml"
+    networks:
+      - traefik
+    volumes:
+      - ./docker/tempo/tempo.yaml:/etc/tempo.yaml:ro
+      - tempo:/tmp/tempo
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tempo.rule=Host(`${TEMPO_DOMAIN}`)
+      - traefik.http.routers.tempo.middlewares=auth@file
+      - traefik.http.routers.tempo.service=tempo
+      - traefik.http.routers.tempo.entryPoints=http
+
+      - traefik.http.routers.tempoHttps.rule=Host(`${TEMPO_DOMAIN}`)
+      - traefik.http.routers.tempoHttps.middlewares=auth@file
+      - traefik.http.routers.tempoHttps.service=tempo
+      - traefik.http.routers.tempoHttps.entryPoints=https
+      - traefik.http.routers.tempoHttps.tls.certResolver=letsEncrypt
+
+      - traefik.http.services.tempo.loadbalancer.server.port=3200
+
+
+networks:
+  traefik:
+    external: true
+    name: traefik
+
+volumes:
+  traefik-acme:
+  traefik-log:
+  arangodb3:
+  arangodb-data:
+  tempo:
