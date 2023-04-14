@@ -1,0 +1,36 @@
+{
+  "name" : "kafka-connect-arangodb",
+  "version" : "1.0.4",
+  "title" : "Kafka Connect ArangoDB",
+  "description" : "Kafka Connect Sink Connector for ArangoDB",
+  "owner" : {
+    "username" : "jaredpetersen",
+    "type" : "user",
+    "name" : "Jared Petersen",
+    "url" : "https://github.com/jaredpetersen",
+    "logo" : "assets/jaredpetersen-logo.png"
+  },
+  "support" : {
+    "summary" : "Support provided through community involvement.",
+    "url" : "https://github.com/jaredpetersen/kafka-connect-arangodb/issues",
+    "provider_name" : "Open Source Community"
+  },
+  "tags" : [ "arangodb", "json", "arango", "graph", "multimodel", "nosql" ],
+  "requirements" : [ "ArangoDB 3.4+" ],
+  "features" : {
+    "supported_encodings" : [ "any" ],
+    "single_message_transforms" : true,
+    "confluent_control_center_integration" : true,
+    "kafka_connect_api" : true
+  },
+  "logo" : "assets/arangodb-avocado-logo.png",
+  "documentation_url" : "https://github.com/jaredpetersen/kafka-connect-arangodb/blob/master/README.md",
+  "source_url" : "https://github.com/jaredpetersen/kafka-connect-arangodb",
+  "docker_image" : { },
+  "license" : [ {
+    "name" : "MIT License",
+    "url" : "https://opensource.org/licenses/MIT"
+  } ],
+  "component_types" : [ "sink" ],
+  "release_date" : "2019-03-29"
+}
