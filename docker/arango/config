@@ -14,11 +14,6 @@ directory = /arango/db
 # @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--serverendpoint
 endpoint = tcp://[::]:8529
 
-# Whether to use authentication for all client requests
-# Default: true
-# @see https://www.arangodb.com/docs/stable/programs-arangod-options.html#--serverauthentication
-authentication = false
-
 
 [log]
 # Set the topic-specific log leve
