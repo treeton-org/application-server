@@ -13,16 +13,45 @@ docker compose --env-file .env.local up
 
 ```mermaid
 flowchart TD
+    %% Labels
+    traefik(traefik)
+    tempo(tempo)
+    arangodb(arangodb)
+    zookeeper(zookeeper)
+    kafka(kafka)
+    schema-registry(schema-registry)
+    connect(connect)
+    ever-node(ever-node)
+
     %% Traefik
-    traefik(traefik)-->|traefik|tempo(tempo)
-    traefik(traefik)-->|traefik|arangodb(arangodb)
+    traefik-->|traefik|arangodb
+    traefik-->|traefik|tempo
+    traefik-->|traefik|schema-registry
+
+    %% Kafka
+    kafka-->|kafka|zookeeper
+    kafka-->|kafka|arangodb
+    schema-registry-->|kafka|kafka
+    connect-->|kafka|zookeeper
+    connect-->|kafka|kafka
+    connect-->|kafka|schema-registry
+
+    %% EverNode
+    ever-node-->|ever-node|kafka
 
 subgraph Arangodb
-    arangodb(arangodb)
+    arangodb
 end
 
-subgraph Grafana
-    tempo(tempo)
+subgraph Kafka
+    zookeeper
+    kafka
+    schema-registry
+    connect
+end
+
+subgraph EverNode
+    ever-node
 end
 ```
 

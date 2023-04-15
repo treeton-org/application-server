@@ -65,6 +65,7 @@ services:
     restart: always
     networks:
       - traefik
+      - kafka
     environment:
       - ARANGO_ROOT_PASSWORD=${ARANGO_ROOT_PASSWORD}
       - ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY=${ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY}
@@ -166,6 +167,7 @@ services:
         condition: service_healthy
     networks:
       - kafka
+      - ever-node
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -206,7 +208,7 @@ services:
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8085,http://${SCHEMA_REGISTRY_DOMAIN}:80,https://${SCHEMA_REGISTRY_DOMAIN}:443
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8085,http://schema-registry:8085,http://${SCHEMA_REGISTRY_DOMAIN}:80,https://${SCHEMA_REGISTRY_DOMAIN}:443
     networks:
       - traefik
       - kafka
@@ -281,6 +283,7 @@ networks:
     external: true
     name: traefik
   kafka:
+  ever-node:
 
 volumes:
   traefik-acme:
