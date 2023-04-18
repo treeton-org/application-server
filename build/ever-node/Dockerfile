@@ -68,12 +68,10 @@ RUN cargo update && cargo build --release
 ##########
 ## Pack ##
 ##########
-FROM ubuntu:18.04
+FROM ubuntu:18.04 as final
 
 # Environments
 ENV TIME_ZONE=Europe/Moscow
-ENV EVER_NODE_PATH=/ever-node
-ENV EVER_NODE_TOOLS_PATH=/ever-node-tools
 ENV ZSTD_LIB_DIR=/usr/lib/x86_64-linux-gnu
 
 # Install curl and gnupg2
@@ -113,6 +111,6 @@ RUN apt-get install -y \
 RUN curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh -s -- -y
 
 # Copy from build
-COPY --from=build ${EVER_NODE_PATH}/target/release/ton_node ${EVER_NODE_PATH}/
-COPY --from=build ${EVER_NODE_TOOLS_PATH}/target/release/console ${EVER_NODE_PATH}/tools/
-COPY --from=build ${EVER_NODE_TOOLS_PATH}/target/release/keygen ${EVER_NODE_PATH}/tools/
+COPY --from=build /ever-node/target/release/ton_node /ever-node/
+COPY --from=build /ever-node-tools/target/release/console /ever-node/tools/
+COPY --from=build /ever-node-tools/target/release/keygen /ever-node/tools/
