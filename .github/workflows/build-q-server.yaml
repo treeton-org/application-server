@@ -2,6 +2,10 @@ name: 'Build q-server'
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'build/q-server/*'
+      - '.github/workflows/build-q-server.yaml'
 
 env:
   ORGANIZATION: treeton-org
