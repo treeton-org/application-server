@@ -23,19 +23,19 @@ flowchart TD
     end
 
         subgraph VictoriaMetrics
-            vmagent(vmagent)
-            victoria-metrics(victoria-metrics)
+            vmagent(Vmagent)
+            victoria-metrics(Victoria Metrics)
             vmagent---victoria-metrics
         end
 
         subgraph Grafana
-            tempo(tempo)
-            grafana(grafana)
+            tempo(Tempo)
+            grafana(Grafana)
             tempo---grafana
         end
 
         subgraph NodeExporter
-            node-exporter(node-exporter)
+            node-exporter(Node exporter)
             node-exporter
         end
 
@@ -46,10 +46,10 @@ flowchart TD
     end
 
         subgraph Kafka
-            zookeeper(zookeeper)
-            kafka(kafka)
-            schema-registry(schema-registry)
-            connect(connect)
+            zookeeper(Zookeeper)
+            kafka(Kafka)
+            schema-registry(Schema Registry)
+            connect(Connect)
             zookeeper---kafka
             connect---zookeeper & kafka
             schema-registry---kafka & connect
@@ -57,12 +57,13 @@ flowchart TD
 
         subgraph QueryServer
             q-server(q-server)
-            arangodb(arangodb)
+            arangodb[(ArangoDB)]
             q-server---arangodb
         end
+        style QueryServer color:transparent,stroke:transparent
 
         subgraph Blockchain
-            statsd(statsd)
+            statsd(StatsD)
             ever-node(ever-node)
             blockchain{Blockchain}
             statsd---ever-node---|ADNL/udp|blockchain
@@ -70,7 +71,7 @@ flowchart TD
 
 
     user((User))
-    traefik(traefik)
+    traefik(Traefik)
 
     user---|HTTP|traefik
     traefik-.-arangodb & tempo & schema-registry & vmagent & victoria-metrics & q-server & statsd & node-exporter & grafana
@@ -91,19 +92,19 @@ flowchart TD
     end
 
         subgraph VictoriaMetrics
-            vmagent(vmagent)
-            victoria-metrics(victoria-metrics)
+            vmagent(Vmagent)
+            victoria-metrics(Victoria Metrics)
             vmagent~~~victoria-metrics
         end
 
         subgraph Grafana
-            tempo(tempo)
-            grafana(grafana)
+            tempo(Tempo)
+            grafana(Grafana)
             tempo~~~grafana
         end
 
         subgraph NodeExporter
-            node-exporter(node-exporter)
+            node-exporter(Node exporter)
             node-exporter
         end
 
@@ -114,10 +115,10 @@ flowchart TD
     end
 
         subgraph Kafka
-            zookeeper(zookeeper)
-            kafka(kafka)
-            schema-registry(schema-registry)
-            connect(connect)
+            zookeeper(Zookeeper)
+            kafka(Kafka)
+            schema-registry(Schema Registry)
+            connect(Connect)
             zookeeper~~~kafka
             connect~~~zookeeper
             connect===|3. Read data from kafka|kafka
@@ -126,12 +127,13 @@ flowchart TD
 
         subgraph QueryServer
             q-server(q-server)
-            arangodb(arangodb)
-            q-server---|7. Read from database|arangodb
+            arangodb[(ArangoDB)]
+           q-server---|7. Read from database|arangodb
         end
+        style QueryServer color:transparent,stroke:transparent
 
         subgraph Blockchain
-            statsd(statsd)
+            statsd(StatsD)
             ever-node(ever-node)
             blockchain{Blockchain}
             statsd~~~ever-node---|1. ADNL/udp|blockchain
@@ -139,7 +141,7 @@ flowchart TD
 
 
     user((User))
-    traefik(traefik)
+    traefik(Traefik)
 
     user---|5. HTTP query|traefik
     traefik~~~arangodb & tempo & schema-registry & vmagent & victoria-metrics & statsd & node-exporter & grafana
