@@ -1,0 +1,49 @@
+name: 'Build ever-node'
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'build/ever-node/*'
+      - '.github/workflows/build-ever-node.yaml'
+
+env:
+  ORGANIZATION: treeton-org
+  EVER_NODE_COMMIT_ID: 0.52.2
+  EVER_NODE_TOOLS_COMMIT_ID: master
+
+jobs:
+  build-ever-node:
+    runs-on: ubuntu-22.04
+    permissions:
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.5.0
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2.1.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tags
+        id: meta
+        uses: docker/metadata-action@v4.4.0
+        with:
+          images: ghcr.io/${{ env.ORGANIZATION }}/ever-node
+          tags: |
+            latest
+            type=raw,value=0.55.1
+
+      - name: Build and push
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: ./build/ever-node
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            EVER_NODE_COMMIT_ID: ${{ env.EVER_NODE_COMMIT_ID }}
+            EVER_NODE_TOOLS_COMMIT_ID: ${{ env.EVER_NODE_TOOLS_COMMIT_ID }}

@@ -4,7 +4,7 @@
 FROM ubuntu:18.04 as build
 
 # Arguments
-ARG EVER_NODE_COMMIT_ID=8ccd0bf976c00f029d152a7f3ca7e86b02899e0f
+ARG EVER_NODE_COMMIT_ID=0.52.2
 ARG EVER_NODE_TOOLS_COMMIT_ID=master
 
 # Environments
