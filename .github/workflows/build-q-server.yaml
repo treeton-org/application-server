@@ -34,7 +34,7 @@ jobs:
           images: ghcr.io/${{ env.ORGANIZATION }}/q-server
           tags: |
             latest
-            type=raw,value=0.55.1
+            type=raw,value=${{ env.TON_Q_SERVER_GITHUB_COMMIT_ID }}
 
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
