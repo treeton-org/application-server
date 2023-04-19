@@ -1,8 +1,10 @@
-FROM node:18-buster
+FROM node:18-buster as X
+
+# Arguments
+ARG TON_Q_SERVER_GITHUB_COMMIT_ID=0.55.1
 
 # Environments
 ENV TON_Q_SERVER_PATH=/q-server
-ENV TON_Q_SERVER_GITHUB_COMMIT_ID=0.54.0
 
 # Clone ton-q-server
 RUN git clone --recursive "https://github.com/tonlabs/ton-q-server" ${TON_Q_SERVER_PATH}
