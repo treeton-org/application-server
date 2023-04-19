@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
 
 env:
+  ORGANIZATION: treeton-org
   TON_Q_SERVER_GITHUB_COMMIT_ID: 0.55.1
 
 jobs:
@@ -26,7 +27,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4.4.0
         with:
-          images: ghcr.io/treeton-org/q-server
+          images: ghcr.io/${{ env.ORGANIZATION }}/q-server
           tags: |
             latest
             type=raw,value=0.55.1
