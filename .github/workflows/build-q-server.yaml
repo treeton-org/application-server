@@ -12,7 +12,7 @@ env:
   TON_Q_SERVER_GITHUB_COMMIT_ID: 0.55.1
 
 jobs:
-  build-ever-node:
+  build-q-server:
     runs-on: ubuntu-22.04
     permissions:
       packages: write
