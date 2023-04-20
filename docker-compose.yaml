@@ -65,7 +65,7 @@ services:
     restart: always
     networks:
       - traefik
-      - kafka
+      - application
     environment:
       - ARANGO_ROOT_PASSWORD=${ARANGO_ROOT_PASSWORD}
       - ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY=${ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY}
@@ -107,6 +107,7 @@ services:
       - "-config.file=/etc/tempo.yaml"
     networks:
       - traefik
+      - application
     volumes:
       - ./docker/tempo/tempo.yaml:/etc/tempo.yaml:ro
       - tempo:/tmp/tempo
@@ -146,7 +147,7 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     networks:
-      - kafka
+      - application
     volumes:
       - zookeeper-data:/var/lib/zookeeper/data
       - zookeeper-log:/var/lib/zookeeper/log
@@ -166,8 +167,7 @@ services:
       zookeeper:
         condition: service_healthy
     networks:
-      - kafka
-      - ever-node
+      - application
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -208,10 +208,10 @@ services:
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8085,http://schema-registry:8085,http://${SCHEMA_REGISTRY_DOMAIN}:80,https://${SCHEMA_REGISTRY_DOMAIN}:443
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8085,http://${SCHEMA_REGISTRY_DOMAIN}:80,https://${SCHEMA_REGISTRY_DOMAIN}:443
     networks:
       - traefik
-      - kafka
+      - application
     labels:
       - traefik.enable=true
 
@@ -228,9 +228,10 @@ services:
 
       - traefik.http.services.schemaRegistry.loadbalancer.server.port=8085
     healthcheck:
-      test: curl --fail --silent --insecure http://0.0.0.0:8085/subjects --output /dev/null || exit 1
+      test: curl --fail --silent --insecure http://schema-registry:8085/subjects --output /dev/null || exit 1
       interval: 10s
       retries: 20
+      start_period: 30s
 
   # Documentation
   # @see https://docs.confluent.io/platform/current/installation/docker/config-reference.html#kconnect-long-configuration
@@ -270,7 +271,7 @@ services:
       CONNECT_PLUGIN_PATH: /usr/share/java,/usr/share/confluent-hub-components
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
     networks:
-      - kafka
+      - application
     volumes:
       - ./docker/kafka-connect-arangodb:/usr/share/java/kafka-connect-arangodb
     healthcheck:
@@ -280,12 +281,96 @@ services:
       retries: 30
 
 
+  ################
+  ## Blockchain ##
+  ################
+  # Documentation
+  # @see https://github.com/statsd/statsd
+  statsd:
+    image: prom/statsd-exporter:v0.23.1
+    container_name: statsd
+    restart: always
+    command:
+      - "--statsd.mapping-config=/statsd-mappings/statsd-mapping.yaml"
+    networks:
+      - traefik
+      - application
+    volumes:
+      - ./docker/statsd/statsd-mapping.yaml:/statsd-mappings/statsd-mapping.yaml:ro
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.statsd.rule=Host(`${STATSD_DOMAIN}`)
+      - traefik.http.routers.statsd.service=statsd
+      - traefik.http.routers.statsd.middlewares=auth@file
+      - traefik.http.routers.statsd.entryPoints=http
+
+      - traefik.http.routers.statsdHttps.rule=Host(`${STATSD_DOMAIN}`)
+      - traefik.http.routers.statsdHttps.service=statsd
+      - traefik.http.routers.statsdHttps.middlewares=auth@file
+      - traefik.http.routers.statsdHttps.entryPoints=https
+      - traefik.http.routers.statsdHttps.tls.certResolver=letsEncrypt
+
+      - traefik.http.services.statsd.loadbalancer.server.port=9102
+    logging:
+      driver: json-file
+      options:
+        max-size: "100m"
+        max-file: "10"
+    healthcheck:
+      test: wget -qO- http://statsd:9102
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+
+  ##################
+  ## Query server ##
+  ##################
+  # Documentation
+  # @see https://github.com/tonlabs/ton-q-server#setup
+  q-server:
+    image: ghcr.io/treeton-org/q-server:0.55.1
+    container_name: q-server
+    restart: always
+    environment:
+      - Q_HOST=0.0.0.0
+      - Q_PORT=4000
+      - Q_ENDPOINTS=http://${Q_SERVER_DOMAIN}:80,https://${Q_SERVER_DOMAIN}:443
+      - Q_DATA_MUT=http://root:${ARANGO_ROOT_PASSWORD}@arangodb:8529
+      - Q_DATA_HOT=http://root:${ARANGO_ROOT_PASSWORD}@arangodb:8529
+      - Q_REQUESTS_SERVER=kafka:9092
+      - Q_QUERY_MAX_RUNTIME=60
+      - Q_STATSD_SERVER=statsd:9102
+      - Q_SLOW_QUERIES=enable
+    networks:
+      - traefik
+      - application
+    depends_on:
+      kafka:
+        condition: service_healthy
+      arangodb:
+        condition: service_healthy
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.qServer.rule=Host(`${Q_SERVER_DOMAIN}`)
+      - traefik.http.routers.qServer.service=qServer
+      - traefik.http.routers.qServer.entryPoints=http
+
+      - traefik.http.routers.qServerHttps.rule=Host(`${Q_SERVER_DOMAIN}`)
+      - traefik.http.routers.qServerHttps.service=qServer
+      - traefik.http.routers.qServerHttps.entryPoints=https
+      - traefik.http.routers.qServerHttps.tls.certResolver=letsEncrypt
+
+      - traefik.http.services.qServer.loadbalancer.server.port=4000
+
+
 networks:
   traefik:
     external: true
     name: traefik
-  kafka:
-  ever-node:
+  application:
 
 volumes:
   traefik-acme:
