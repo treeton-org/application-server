@@ -29,7 +29,7 @@ RUN mvn package
 RUN git clone --recursive ${JACKSON_CORE_REPOSITORY} ${JACKSON_CORE_PATH}
 RUN git -C ${JACKSON_CORE_PATH} checkout ${JACKSON_CORE_COMMIT}
 WORKDIR ${JACKSON_CORE_PATH}
-RUN mvn package
+RUN mvn clean install -DskipTests=true
 
 # slf4j-api
 RUN git clone --recursive ${SLF4J_REPOSITORY} ${SLF4J_PATH}
