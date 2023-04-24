@@ -9,8 +9,8 @@ on:
 
 env:
   ORGANIZATION: treeton-org
-  EVER_NODE_COMMIT_ID: 0.52.2
-  EVER_NODE_TOOLS_COMMIT_ID: master
+  EVER_NODE_COMMIT: 0.52.2
+  EVER_NODE_TOOLS_COMMIT: master
 
 jobs:
   strategy:
@@ -43,7 +43,7 @@ jobs:
           images: ghcr.io/${{ env.ORGANIZATION }}/ever-node
           tags: |
             latest
-            type=raw,value=${{ env.EVER_NODE_COMMIT_ID }}${{ matrix.suffix }}
+            type=raw,value=${{ env.EVER_NODE_COMMIT }}${{ matrix.suffix }}
 
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
@@ -53,6 +53,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            EVER_NODE_COMMIT_ID: ${{ env.EVER_NODE_COMMIT_ID }}
-            EVER_NODE_TOOLS_COMMIT_ID: ${{ env.EVER_NODE_TOOLS_COMMIT_ID }}
+            EVER_NODE_COMMIT: ${{ env.EVER_NODE_COMMIT }}
+            EVER_NODE_TOOLS_COMMIT: ${{ env.EVER_NODE_TOOLS_COMMIT }}
             FEATURES: ${{ matrix.features }}
