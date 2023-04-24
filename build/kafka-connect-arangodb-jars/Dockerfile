@@ -19,25 +19,25 @@ ENV JACKSON_CORE_PATH=/jackson-core
 ENV SLF4J_PATH=/slf4j
 ENV VELOCYPACK_PATH=/velocypack
 
-## Build kafka-connect-arangodb
+# Build kafka-connect-arangodb
 RUN git clone --recursive ${KAFKA_CONNECT_ARANGODB_REPOSITORY} ${KAFKA_CONNECT_ARANGODB_PATH}
 RUN git -C ${KAFKA_CONNECT_ARANGODB_PATH} checkout ${KAFKA_CONNECT_ARANGODB_COMMIT}
 WORKDIR ${KAFKA_CONNECT_ARANGODB_PATH}
 RUN mvn package
 
-# jackson-core
+# Build jackson-core
 RUN git clone --recursive ${JACKSON_CORE_REPOSITORY} ${JACKSON_CORE_PATH}
 RUN git -C ${JACKSON_CORE_PATH} checkout ${JACKSON_CORE_COMMIT}
 WORKDIR ${JACKSON_CORE_PATH}
 RUN mvn clean install -DskipTests=true
 
-# slf4j-api
+# Build slf4j-api
 RUN git clone --recursive ${SLF4J_REPOSITORY} ${SLF4J_PATH}
 RUN git -C ${SLF4J_PATH} checkout ${SLF4J_COMMIT}
 WORKDIR ${SLF4J_PATH}
 RUN mvn clean install -pl slf4j-api -am
 
-# velocypack
+# Build velocypack
 RUN git clone --recursive ${VELOCYPACK_REPOSITORY} ${VELOCYPACK_PATH}
 RUN git -C ${VELOCYPACK_PATH} checkout ${VELOCYPACK_COMMIT}
 WORKDIR ${VELOCYPACK_PATH}
