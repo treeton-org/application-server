@@ -1,0 +1,5 @@
+#!/bin/bash
+/work/create_topics
+/work/create_connectors
+exec tail -f /dev/null
+
