@@ -190,7 +190,7 @@ services:
     healthcheck:
       test: nc -z localhost 9092 || exit -1
       interval: 10s
-      retries: 20
+      retries: 40
 
   # Documentation
   # @see https://docs.confluent.io/platform/current/installation/docker/config-reference.html#sr-long-configuration
