@@ -13,7 +13,7 @@ env:
   EVER_NODE_TOOLS_COMMIT: master
 
 jobs:
-  build-ever-node:
+  build:
     strategy:
       matrix:
         include:

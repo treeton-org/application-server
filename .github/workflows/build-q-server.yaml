@@ -12,7 +12,7 @@ env:
   TON_Q_SERVER_COMMIT: 0.55.1
 
 jobs:
-  build-q-server:
+  build:
     runs-on: ubuntu-22.04
     permissions:
       packages: write
