@@ -4,7 +4,9 @@
 FROM ubuntu:18.04 as build
 
 # Arguments
+ARG EVER_NODE_REPOSITORY=https://github.com/tonlabs/ever-node
 ARG EVER_NODE_COMMIT_ID=0.52.2
+ARG EVER_NODE_TOOLS_REPOSITORY=https://github.com/tonlabs/ever-node-tools
 ARG EVER_NODE_TOOLS_COMMIT_ID=master
 
 # Environments
@@ -19,11 +21,11 @@ RUN apt-get update
 RUN apt-get install -y git curl gnupg2
 
 # Clone ever-node
-RUN git clone --recursive "https://github.com/tonlabs/ever-node" ${EVER_NODE_PATH}
+RUN git clone --recursive ${EVER_NODE_REPOSITORY} ${EVER_NODE_PATH}
 RUN git -C ${EVER_NODE_PATH} checkout ${EVER_NODE_COMMIT_ID}
 
 # Clone ever-node-tools
-RUN git clone --recursive "https://github.com/tonlabs/ever-node-tools" ${EVER_NODE_TOOLS_PATH}
+RUN git clone --recursive ${EVER_NODE_TOOLS_REPOSITORY} ${EVER_NODE_TOOLS_PATH}
 RUN git -C ${EVER_NODE_TOOLS_PATH} checkout ${EVER_NODE_TOOLS_COMMIT_ID}
 
 # Set time zone
