@@ -5,7 +5,7 @@ on:
   push:
     paths:
       - 'build/kafka-connect-arangodb-jars/*'
-      - '.github/workflows/kafka-connect-arangodb-jars.yaml'
+      - '.github/workflows/build-kafka-connect-arangodb-jars.yaml'
 
 env:
   ORGANIZATION: treeton-org
