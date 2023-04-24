@@ -39,7 +39,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
         with:
-          context: ./build/q-server
+          context: ./build/kafka-connect-arangodb-jars
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
