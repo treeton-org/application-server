@@ -8,6 +8,7 @@ ARG EVER_NODE_REPOSITORY=https://github.com/tonlabs/ever-node
 ARG EVER_NODE_COMMIT_ID=0.52.2
 ARG EVER_NODE_TOOLS_REPOSITORY=https://github.com/tonlabs/ever-node-tools
 ARG EVER_NODE_TOOLS_COMMIT_ID=master
+ARG FEATURES="external_db,metrics"
 
 # Environments
 ENV TIME_ZONE=Europe/Moscow
@@ -60,7 +61,7 @@ RUN curl --proto '=https' --tlsv1.3 https://sh.rustup.rs -sSf | sh -s -- -y
 
 # Build ever-node
 WORKDIR ${EVER_NODE_PATH}
-RUN cargo update && cargo build --release --features "external_db,metrics"
+RUN cargo update && cargo build --release --features "${FEATURES}"
 
 # Build ever-node-tools
 WORKDIR ${EVER_NODE_TOOLS_PATH}

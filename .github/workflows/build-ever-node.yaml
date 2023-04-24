@@ -13,6 +13,14 @@ env:
   EVER_NODE_TOOLS_COMMIT_ID: master
 
 jobs:
+  strategy:
+    matrix:
+      include:
+        - features: "external_db,metrics"
+          suffix: ""
+        - features: "external_db,metrics,gosh"
+          suffix: "-gosh"
+
   build-ever-node:
     runs-on: ubuntu-22.04
     permissions:
@@ -35,7 +43,7 @@ jobs:
           images: ghcr.io/${{ env.ORGANIZATION }}/ever-node
           tags: |
             latest
-            type=raw,value=${{ env.EVER_NODE_COMMIT_ID }}
+            type=raw,value=${{ env.EVER_NODE_COMMIT_ID }}${{ matrix.suffix }}
 
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
@@ -47,3 +55,4 @@ jobs:
           build-args: |
             EVER_NODE_COMMIT_ID: ${{ env.EVER_NODE_COMMIT_ID }}
             EVER_NODE_TOOLS_COMMIT_ID: ${{ env.EVER_NODE_TOOLS_COMMIT_ID }}
+            FEATURES: ${{ matrix.features }}
