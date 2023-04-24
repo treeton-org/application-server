@@ -154,7 +154,7 @@ services:
     healthcheck:
       test: echo srvr | nc zookeeper 2181
       interval: 10s
-      retries: 20
+      retries: 40
 
   # Documentation
   # @see https://docs.confluent.io/platform/current/installation/docker/config-reference.html#confluent-ak-configuration
@@ -230,7 +230,7 @@ services:
     healthcheck:
       test: curl --fail --silent --insecure http://schema-registry:8085/subjects --output /dev/null || exit 1
       interval: 10s
-      retries: 20
+      retries: 40
       start_period: 30s
 
   # Documentation
@@ -275,7 +275,32 @@ services:
       test: curl -s -f http://connect:8083
       interval: 10s
       timeout: 5s
-      retries: 30
+      retries: 40
+
+  connect-init:
+    image: ghcr.io/treeton-org/application-server-init:1.0.0
+    container_name: connect-init
+    restart: always
+    depends_on:
+      connect:
+        condition: service_healthy
+    environment:
+      BOOTSTRAP_SERVER: kafka:9092
+      CONNECT: connect:8083
+      ARANGO_HOST: arangodb
+      ARANGO_PORT: 8529
+      ARANGO_USER: root
+      ARANGO_PASSWORD: ${ARANGO_ROOT_PASSWORD}
+    volumes:
+      - ./docker/init:/init/templates:ro
+    healthcheck:
+      test: /init/check http://connect:8083
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+    networks:
+      - application
 
 
   ################

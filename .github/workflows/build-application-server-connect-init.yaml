@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'build/application-server-init/**'
-      - '.github/workflows/build-application-server-init.yaml'
+      - 'build/application-server-connect-init/**'
+      - '.github/workflows/build-application-server-connect-init.yaml'
 
 env:
   ORGANIZATION: treeton-org
@@ -31,7 +31,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4.4.0
         with:
-          images: ghcr.io/${{ env.ORGANIZATION }}/application-server-init
+          images: ghcr.io/${{ env.ORGANIZATION }}/application-server-connect-init
           tags: |
             latest
             type=raw,value=${{ env.VERSION }}
@@ -39,7 +39,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
         with:
-          context: ./build/application-server-init
+          context: ./build/application-server-connect-init
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

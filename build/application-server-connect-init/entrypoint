@@ -1,15 +1,21 @@
 #!/bin/bash
 set -e
 
-ZOOKEEPER="${ZOOKEEPER:="zookeeper:2181"}"
+BOOTSTRAP_SERVER="${BOOTSTRAP_SERVER:="kafka:9092"}"
 CONNECT="${CONNECT:="connect:8083"}"
+ARANGO_HOST="${ARANGO_HOST:="arangodb"}"
+ARANGO_PORT="${ARANGO_PORT:="8529"}"
+ARANGO_USER="${ARANGO_USER:="root"}"
+ARANGO_PASSWORD="${ARANGO_PASSWORD:="123"}"
 
 createTopic() {
   local topic="${1}"
   local partitions="${2}"
-  kafka-topics --create --zookeeper "${ZOOKEEPER}" --topic "${topic}" --replication-factor 1 --partitions "${partitions}" --if-not-exists
+  set -e pipefail
+  kafka-topics --create --bootstrap-server "${BOOTSTRAP_SERVER}" --topic "${topic}" --replication-factor 1 --partitions "${partitions}" --if-not-exists
   sleep 2
-  kafka-topics --alter --zookeeper "${ZOOKEEPER}" --topic "${topic}" --partitions "${partitions}" --if-exists
+  set +e
+  kafka-topics --alter --bootstrap-server "${BOOTSTRAP_SERVER}" --topic "${topic}" --partitions "${partitions}" --if-exists
   sleep 2
 }
 
@@ -20,6 +26,7 @@ createTopic blocks 5
 createTopic messages 60
 createTopic requests 30
 createTopic blocks_signatures 5
+set -e pipefail
 
 # Process templates
 cd /init/templates
@@ -31,7 +38,7 @@ do
       sed "s/{{ arangodb.port }}/${ARANGO_PORT}/g" | \
       sed "s/{{ arangodb.user }}/${ARANGO_USER}/g" | \
       sed "s/{{ arangodb.password }}/${ARANGO_PASSWORD}/g" \
-      > "/home/noop/connectors/${template}"
+      > "/init/connectors/${template}"
 done
 
 # Create connectors
