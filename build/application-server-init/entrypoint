@@ -1,0 +1,50 @@
+#!/bin/bash
+set -e
+
+ZOOKEEPER="${ZOOKEEPER:="zookeeper:2181"}"
+CONNECT="${CONNECT:="connect:8083"}"
+
+createTopic() {
+  local topic="${1}"
+  local partitions="${2}"
+  kafka-topics --create --zookeeper "${ZOOKEEPER}" --topic "${topic}" --replication-factor 1 --partitions "${partitions}" --if-not-exists
+  sleep 2
+  kafka-topics --alter --zookeeper "${ZOOKEEPER}" --topic "${topic}" --partitions "${partitions}" --if-exists
+  sleep 2
+}
+
+# Create topics
+createTopic accounts 20
+createTopic transactions 40
+createTopic blocks 5
+createTopic messages 60
+createTopic requests 30
+createTopic blocks_signatures 5
+
+# Process templates
+cd /init/templates
+TEMPLATES=$(ls ./*.json)
+for template in ${TEMPLATES}
+do
+    cat < "/init/templates/${template}" | \
+      sed "s/{{ arangodb.host }}/${ARANGO_HOST}/g" | \
+      sed "s/{{ arangodb.port }}/${ARANGO_PORT}/g" | \
+      sed "s/{{ arangodb.user }}/${ARANGO_USER}/g" | \
+      sed "s/{{ arangodb.password }}/${ARANGO_PASSWORD}/g" \
+      > "/home/noop/connectors/${template}"
+done
+
+# Create connectors
+CONNECTORS=$(ls /init/connectors/*.json)
+for connector in ${CONNECTORS}
+do
+    curl --max-time 5 -i -X POST \
+      -H "Accept:application/json" \
+      -H "Content-Type:application/json" \
+      "${CONNECT}/connectors/" -d "@/${connector}"
+    sleep 10s
+done
+
+# Endless
+exec tail -f /dev/null
+
