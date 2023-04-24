@@ -9,7 +9,7 @@ on:
 
 env:
   ORGANIZATION: treeton-org
-  TON_Q_SERVER_GITHUB_COMMIT: 0.55.1
+  TON_Q_SERVER_COMMIT: 0.55.1
 
 jobs:
   build-q-server:
@@ -34,7 +34,7 @@ jobs:
           images: ghcr.io/${{ env.ORGANIZATION }}/q-server
           tags: |
             latest
-            type=raw,value=${{ env.TON_Q_SERVER_GITHUB_COMMIT }}
+            type=raw,value=${{ env.TON_Q_SERVER_COMMIT }}
 
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
@@ -44,4 +44,4 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            TON_Q_SERVER_GITHUB_COMMIT: ${{ env.TON_Q_SERVER_GITHUB_COMMIT }}
+            TON_Q_SERVER_COMMIT: ${{ env.TON_Q_SERVER_COMMIT }}
