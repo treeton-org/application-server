@@ -9,6 +9,12 @@ docker network create traefik
 docker compose --env-file .env.local up
 ```
 
+## Generate `*.jar` files for Kafka Connect and ArangoDB
+
+```shell
+docker compose -f docker-compose-jars.yaml up
+```
+
 ## Docker network scheme
 
 * `- - -` lines - `traefik` docker network 
@@ -152,7 +158,3 @@ flowchart TD
     vmagent~~~~~grafana & statsd & node-exporter & arangodb
     victoria-metrics~~~grafana
 ```
-
-## Handmade
-
-`docker/kafka-connect-arangodb` files compiled from [kafka-connect-arangodb](https://github.com/tonlabs/kafka-connect-arangodb) and placed manually into directory 

@@ -1,0 +1,7 @@
+version: '3.9'
+services:
+  jars:
+    image: ghcr.io/treeton-org/kafka-connect-arangodb-jars:1.0.0
+    container_name: jars
+    volumes:
+      - ./docker/kafka-connect-arangodb:/target:rw
