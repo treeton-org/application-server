@@ -13,15 +13,14 @@ env:
   EVER_NODE_TOOLS_COMMIT: master
 
 jobs:
-  strategy:
-    matrix:
-      include:
-        - features: "external_db,metrics"
-          suffix: ""
-        - features: "external_db,metrics,gosh"
-          suffix: "-gosh"
-
   build-ever-node:
+    strategy:
+      matrix:
+        include:
+          - features: "external_db,metrics"
+            suffix: ""
+          - features: "external_db,metrics,gosh"
+            suffix: "-gosh"
     runs-on: ubuntu-22.04
     permissions:
       packages: write
