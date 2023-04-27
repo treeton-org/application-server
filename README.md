@@ -4,12 +4,30 @@ Refactored copy of [evernode-ds](https://github.com/tonlabs/evernode-ds)
 
 ## Up local
 
-```shell
-docker network create traefik
-docker compose --env-file .env.local up
-```
+1. Place `ton-global.config.json` of network into `docker/ever-node/ton-global.config.json`. You can find some examples in `docker/ever-node/globals`
+   ```shell
+   cp -rf docker/ever-node/globals/treeton.ton-global.config.json docker/ever-node/ton-global.config.json
+   ```
+2. Copy `.env.local` to `.env` end edit
+   ```shell
+   cp .env.local .env
+   ```
+3. Create network for external HTTP and volume for ever-node
+   ```shell
+   docker network create traefik
+   docker volume create ever-node-configs
+   ```
+4. Generate ever-node key
+   ```shell
+   docker compose --env-file .env -f keygen.yaml up
+   docker compose --env-file .env -f keygen.yaml down
+   ```
+5. Up
+   ```shell
+   docker compose --env-file .env up
+   ```
 
-## Generate `*.jar` files for Kafka Connect and ArangoDB
+## Generate new `*.jar` files for Kafka Connect and ArangoDB
 
 ```shell
 docker compose -f docker-compose-jars.yaml up

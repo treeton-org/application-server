@@ -1,0 +1,63 @@
+#!/bin/bash -eEx
+
+HOSTNAME=$(hostname -f)
+CONSOLE_SERVER_PORT=${CONSOLE_SERVER_PORT:-3031}
+
+# Directories
+ROOT=/ever-node
+DEFAULT=${ROOT}/default
+CONFIGS=${ROOT}/configs
+TOOLS=${ROOT}/tools
+TMP=/tmp/keygen
+
+# Files
+CONSOLE_CLIENT_KEYS="${CONFIGS}/${HOSTNAME}_console_client_keys.json"
+CONSOLE_CLIENT_PUBLIC="${CONFIGS}/console_client_public.json"
+DEFAULT_CONFIG="${CONFIGS}/default_config.json"
+CONSOLE_CONFIG="${CONFIGS}/console_config.json"
+CONSOLE_TEMPLATE="${CONFIGS}/console_template.json"
+CONSOLE="${CONFIGS}/console.json"
+CONFIG="${CONFIGS}/config.json"
+
+# Temporary files
+TMP_DEFAULT_CONFIG="${TMP}/default_config.json"
+TMP_CONSOLE_CONFIG="${TMP}/console_config.json"
+
+# Create temporary directory
+mkdir -p "${TMP}"
+
+# Clear config directory
+rm -f ${CONFIGS}/*
+
+# Copy configs to `config` directory
+cp ${DEFAULT}/* ${CONFIGS}
+cp ${ROOT}/ton-global.config.json ${CONFIGS}
+
+# Generate keys and save public key
+${TOOLS}/keygen > "${CONSOLE_CLIENT_KEYS}"
+cat "${CONSOLE_CLIENT_KEYS}"
+jq -c .public "${CONSOLE_CLIENT_KEYS}" > "${CONSOLE_CLIENT_PUBLIC}"
+
+# Set control server port in default config
+jq ".control_server_port = ${CONSOLE_SERVER_PORT}" "${DEFAULT_CONFIG}" > "${TMP_DEFAULT_CONFIG}"
+cp -rf "${TMP_DEFAULT_CONFIG}" "${DEFAULT_CONFIG}"
+
+# Remove config.json
+rm -rf "${CONFIG}"
+
+# Generate config.json using public key
+cd "${ROOT}" && "${ROOT}/ton_node" --configs "${CONFIGS}" --ckey "$(cat "${CONSOLE_CLIENT_PUBLIC}")" &
+sleep 10
+
+# Output generated config.json
+cat "${CONFIG}"
+
+# Save generated private key and generated console config into one file
+jq ".client_key = $(jq .private "${CONSOLE_CLIENT_KEYS}")" "${CONSOLE_CONFIG}" > "${TMP_CONSOLE_CONFIG}"
+jq ".config = $(cat "${TMP_CONSOLE_CONFIG}")" "${CONSOLE_TEMPLATE}" > "${CONSOLE}"
+
+# Remove generated console config
+rm -f "${CONSOLE_CONFIG}"
+
+# Remove temporary directory
+rm -rf "${TMP}"

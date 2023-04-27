@@ -1,0 +1,3 @@
+#!/bin/bash -eEx
+cd /ever-node
+exec /ever-node/ton_node --configs /ever-node/configs

@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  keygen:
+    image: ghcr.io/treeton-org/ever-node:0.52.2
+    container_name: ever-node
+    environment:
+      ADNL_PORT: "${EVER_NODE_ADNL_PORT}"
+      VALIDATOR_NAME: "${EVER_NODE_VALIDATOR_NAME}"
+      CONSOLE_SERVER_PORT: "${EVER_NODE_CONSOLE_SERVER_PORT}"
+      STATSD_DOMAIN: 'statsd:'
+      STATSD_PORT: 9125
+    volumes:
+      - ./docker/ever-node/default:/ever-node/default
+      - ./docker/ever-node/ton-global.config.json:/ever-node/ton-global.config.json:ro
+      - ./docker/ever-node/keygen:/ever-node/keygen:ro
+      - ever-node-configs:/ever-node/configs
+      - ever-node-db:/ever-node/node_db
+      - ever-node-logs:/ever-node/logs
+    entrypoint: /ever-node/keygen
+    cap_add:
+      - SYS_PTRACE
+
+volumes:
+  ever-node-configs:
+    external: true
+  ever-node-db:
+  ever-node-logs:

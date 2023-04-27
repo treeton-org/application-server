@@ -278,7 +278,7 @@ services:
       retries: 40
 
   connect-init:
-    image: ghcr.io/treeton-org/application-server-init:1.0.0
+    image: ghcr.io/treeton-org/application-server-connect-init:1.0.0
     container_name: connect-init
     restart: always
     depends_on:
@@ -290,9 +290,9 @@ services:
       ARANGO_HOST: arangodb
       ARANGO_PORT: 8529
       ARANGO_USER: root
-      ARANGO_PASSWORD: ${ARANGO_ROOT_PASSWORD}
+      ARANGO_PASSWORD: "${ARANGO_ROOT_PASSWORD}"
     volumes:
-      - ./docker/init:/init/templates:ro
+      - ./docker/connect-init:/init/templates:ro
     healthcheck:
       test: /init/check http://connect:8083
       interval: 60s
@@ -306,6 +306,41 @@ services:
   ################
   ## Blockchain ##
   ################
+  # Source code
+  # @see https://github.com/tonlabs/ever-node
+  ever-node:
+    image: ghcr.io/treeton-org/ever-node:0.52.2
+    container_name: ever-node
+    restart: always
+    depends_on:
+      connect:
+        condition: service_healthy
+      statsd:
+        condition: service_healthy
+    environment:
+      ADNL_PORT: "${EVER_NODE_ADNL_PORT}"
+      VALIDATOR_NAME: "${EVER_NODE_VALIDATOR_NAME}"
+      CONSOLE_SERVER_PORT: "${EVER_NODE_CONSOLE_SERVER_PORT}"
+      STATSD_DOMAIN: 'statsd:'
+      STATSD_PORT: 9125
+    volumes:
+      - ./docker/ever-node/entrypoint:/ever-node/entrypoint:ro
+      - ever-node-configs:/ever-node/configs
+      - ever-node-db:/ever-node/node_db
+      - ever-node-logs:/ever-node/logs
+    entrypoint: /ever-node/entrypoint
+    networks:
+      - application
+    ports:
+      - "${EVER_NODE_ADNL_PORT}:${EVER_NODE_ADNL_PORT}/udp"
+    cap_add:
+      - SYS_PTRACE
+    logging:
+      driver: json-file
+      options:
+        max-size: "1000m"
+        max-file: "100"
+
   # Documentation
   # @see https://github.com/statsd/statsd
   statsd:
@@ -403,3 +438,7 @@ volumes:
   zookeeper-data:
   zookeeper-log:
   kafka:
+  ever-node-configs:
+    external: true
+  ever-node-db:
+  ever-node-logs:
