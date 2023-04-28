@@ -2,7 +2,14 @@
 
 Refactored copy of [evernode-ds](https://github.com/tonlabs/evernode-ds)
 
-## Up local
+## Run locally and manually
+
+**Requirements**
+
+* [Docker](https://www.docker.com)
+* [Docker Compose](https://docs.docker.com/compose)
+
+**Actions**
 
 1. Place `ton-global.config.json` of network into `docker/ever-node/ton-global.config.json`. You can find some examples in `docker/ever-node/globals`
    ```shell
@@ -30,12 +37,6 @@ Refactored copy of [evernode-ds](https://github.com/tonlabs/evernode-ds)
    ```shell
    docker compose --env-file .env up
    ```
-
-## Generate new `*.jar` files for Kafka Connect and ArangoDB
-
-```shell
-docker compose -f docker-compose-jars.yaml up
-```
 
 ## Docker network scheme
 
@@ -183,4 +184,10 @@ flowchart TD
     q-server~~~kafka
     vmagent~~~~~grafana & statsd & node-exporter & cadvisor & arangodb
     victoria-metrics~~~grafana
+```
+
+## Generate new `*.jar` files for Kafka Connect and ArangoDB
+
+```shell
+docker compose -f docker-compose-jars.yaml up
 ```
