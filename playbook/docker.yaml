@@ -4,7 +4,7 @@
 
   tasks:
     - name: Create traefik network
-      shell: docker network create traefik
+      shell: docker network create traefik || true
 
     - name: Create ever-node-configs volume
-      shell: docker volume create ever-node-configs
+      shell: docker volume create ever-node-configs || true
