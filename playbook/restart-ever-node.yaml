@@ -4,6 +4,6 @@
 
   tasks:
     - name: Restart
-      shell: docker exec ever-node "docker container restart ever-node"
+      shell: docker container restart ever-node
       args:
         chdir: /srv/application-server
