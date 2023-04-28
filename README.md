@@ -226,13 +226,22 @@ docker compose -f docker-compose-jars.yaml up
 
 ## Troubleshooting
 
-### Detect problems
+### Detect problems on server
+
+#### View logs
 
 ```shell
-#TODO
+docker exec -it ever-node /bin/bash
+tail -f /ever-node/logs/output.log | grep INFO
 ```
 
-### Restart docker container
+#### View status
+
+```shell
+watch -n 0.2 docker exec ever-node ever-node/tools/console -C /ever-node/configs/console.json -c getstats
+```
+
+### Restart docker container from local
 
 ```shell
 ansible-playbook -i playbook/inventory.yaml playbook/restart-ever-node.yaml
