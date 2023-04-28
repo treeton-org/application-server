@@ -208,25 +208,9 @@ services:
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8085,http://${SCHEMA_REGISTRY_DOMAIN}:80,https://${SCHEMA_REGISTRY_DOMAIN}:443
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8085
     networks:
-      - traefik
       - application
-    labels:
-      - traefik.enable=true
-
-      - traefik.http.routers.schemaRegistry.rule=Host(`${SCHEMA_REGISTRY_DOMAIN}`)
-      - traefik.http.routers.schemaRegistry.service=schemaRegistry
-      - traefik.http.routers.schemaRegistry.middlewares=auth@file
-      - traefik.http.routers.schemaRegistry.entryPoints=http
-
-      - traefik.http.routers.schemaRegistryHttps.rule=Host(`${SCHEMA_REGISTRY_DOMAIN}`)
-      - traefik.http.routers.schemaRegistryHttps.service=schemaRegistry
-      - traefik.http.routers.schemaRegistryHttps.middlewares=auth@file
-      - traefik.http.routers.schemaRegistryHttps.entryPoints=https
-      - traefik.http.routers.schemaRegistryHttps.tls.certResolver=letsEncrypt
-
-      - traefik.http.services.schemaRegistry.loadbalancer.server.port=8085
     healthcheck:
       test: curl --fail --silent --insecure http://schema-registry:8085/subjects --output /dev/null || exit 1
       interval: 10s

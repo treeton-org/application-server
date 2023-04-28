@@ -10,7 +10,6 @@ all:
     TRAEFIK_METRICS_DOMAIN: metrics.traefik.main.treeton.localhost
     TEMPO_DOMAIN: tempo.main.treeton.localhost
     ARANGO_DOMAIN: arango.main.treeton.localhost
-    SCHEMA_REGISTRY_DOMAIN: schema-registry.main.treeton.localhost
     STATSD_DOMAIN: statsd.main.treeton.localhost
     Q_SERVER_DOMAIN: main.treeton.localhost
 

@@ -44,7 +44,6 @@
         echo TRAEFIK_METRICS_DOMAIN="{{ TRAEFIK_METRICS_DOMAIN }}" >> .env
         echo TEMPO_DOMAIN="{{ TEMPO_DOMAIN }}" >> .env
         echo ARANGO_DOMAIN="{{ ARANGO_DOMAIN }}" >> .env
-        echo SCHEMA_REGISTRY_DOMAIN="{{ SCHEMA_REGISTRY_DOMAIN }}" >> .env
         echo STATSD_DOMAIN="{{ STATSD_DOMAIN }}" >> .env
         echo Q_SERVER_DOMAIN="{{ Q_SERVER_DOMAIN }}" >> .env
         

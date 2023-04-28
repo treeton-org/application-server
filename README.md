@@ -136,7 +136,7 @@ flowchart TD
     traefik(Traefik)
 
     user---|HTTP|traefik
-    traefik-.-arangodb & tempo & schema-registry & vmagent & victoria-metrics & q-server & statsd & node-exporter & cadvisor & grafana
+    traefik-.-arangodb & tempo & vmagent & victoria-metrics & q-server & statsd & node-exporter & cadvisor & grafana
     kafka---ever-node
     connect---arangodb
     q-server---kafka
@@ -209,7 +209,7 @@ flowchart TD
     traefik(Traefik)
 
     user---|5. HTTP query|traefik
-    traefik~~~arangodb & tempo & schema-registry & vmagent & victoria-metrics & statsd & node-exporter & cadvisor & grafana
+    traefik~~~arangodb & tempo & vmagent & victoria-metrics & statsd & node-exporter & cadvisor & grafana
     traefik---|6. Proxy redirect|q-server
     kafka---|2. Parsed data: blocks, accounts, messages, transaction|ever-node
     connect---|4. Store data|arangodb
