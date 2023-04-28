@@ -1,0 +1,11 @@
+- name: Generate ever-node keys
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - name: Up docker containers
+      shell: |
+        docker compose --env-file .env -f keygen.yaml up
+        docker compose --env-file .env -f keygen.yaml down
+      args:
+        chdir: /srv/application-server

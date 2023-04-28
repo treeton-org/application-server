@@ -4,3 +4,22 @@ all:
   vars:
     ansible_ssh_user: 'root'
     ansible_port: '22'
+
+    TRAEFIK_DOMAIN: traefik.main.treeton.localhost
+    TRAEFIL_ACME_EMAIL: traefik@main.treeton.localhost
+    TRAEFIK_METRICS_DOMAIN: metrics.traefik.main.treeton.localhost
+    TEMPO_DOMAIN: tempo.main.treeton.localhost
+    ARANGO_DOMAIN: arango.main.treeton.localhost
+    SCHEMA_REGISTRY_DOMAIN: schema-registry.main.treeton.localhost
+    STATSD_DOMAIN: statsd.main.treeton.localhost
+    Q_SERVER_DOMAIN: main.treeton.localhost
+
+    ARANGO_ROOT_PASSWORD: 123
+    ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY: 32G
+
+    EVER_NODE_CONSOLE_SERVER_PORT: 3031
+    EVER_NODE_VALIDATOR_NAME: VALIDATOR
+    EVER_NODE_ADNL_PORT: 30303
+
+    BASIC_AUTH_USER: admin
+    BASIC_AUTH_PASSWORD: admin

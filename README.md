@@ -2,6 +2,35 @@
 
 Refactored copy of [evernode-ds](https://github.com/tonlabs/evernode-ds)
 
+## Deploy on server
+
+**Requirements**
+
+* [Ansible](https://www.ansible.com)
+* Server with `apt`
+
+**Actions**
+
+1. Place `ton-global.config.json` of network in `docker/ever-node/ton-global.config.json`.
+   You can find some examples in `docker/ever-node/globals`
+   ```shell
+   cp -rf docker/ever-node/globals/treeton.ton-global.config.json docker/ever-node/ton-global.config.json
+   ```
+2. Copy `playbook/inventory.example.yaml` to `playbook/inventory.yaml` end edit
+   ```shell
+   cp playbook/inventory.example.yaml playbook/inventory.yaml
+   ```
+3. Up
+   ```shell
+   ansible-playbook -i playbook/inventory.yaml playbook/install.yaml
+   ```
+
+## Update on server
+
+```shell
+ansible-playbook -i playbook/inventory.yaml playbook/update.yaml
+```
+
 ## Run locally and manually
 
 **Requirements**
@@ -11,7 +40,8 @@ Refactored copy of [evernode-ds](https://github.com/tonlabs/evernode-ds)
 
 **Actions**
 
-1. Place `ton-global.config.json` of network into `docker/ever-node/ton-global.config.json`. You can find some examples in `docker/ever-node/globals`
+1. Place `ton-global.config.json` of network in `docker/ever-node/ton-global.config.json`.
+   You can find some examples in `docker/ever-node/globals`
    ```shell
    cp -rf docker/ever-node/globals/treeton.ton-global.config.json docker/ever-node/ton-global.config.json
    ```
@@ -19,7 +49,8 @@ Refactored copy of [evernode-ds](https://github.com/tonlabs/evernode-ds)
    ```shell
    cp .env.local .env
    ```
-3. Copy `.htpasswd.example` to `.htpasswd` end edit. This file protect your metrics in production. Default user and password `admin:admin`
+3. Copy `.htpasswd.example` to `.htpasswd` end edit. This file protect your metrics in production.
+   Default user and password is `admin:admin`
    ```shell
    cp .htpasswd.example .htpasswd
    ```
@@ -40,7 +71,7 @@ Refactored copy of [evernode-ds](https://github.com/tonlabs/evernode-ds)
 
 ## Docker network scheme
 
-* `- - -` lines - `traefik` docker network 
+* `- - -` lines - `traefik` docker network
 * `—————` lines - `application` docker network
 
 ```mermaid
@@ -114,6 +145,7 @@ flowchart TD
 ```
 
 Main workflow reading data from blockchain
+
 ```mermaid
 flowchart TD
     subgraph Metrics
@@ -190,4 +222,18 @@ flowchart TD
 
 ```shell
 docker compose -f docker-compose-jars.yaml up
+```
+
+## Troubleshooting
+
+### Detect problems
+
+```shell
+#TODO
+```
+
+### Restart docker container
+
+```shell
+ansible-playbook -i playbook/inventory.yaml playbook/restart-ever-node.yaml
 ```

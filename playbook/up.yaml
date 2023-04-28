@@ -1,0 +1,12 @@
+- name: Update docker containers
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - name: Update
+      shell: |
+        docker compose --env-file .env pull
+        docker compose --env-file .env down
+        docker compose --env-file .env up -d
+      args:
+        chdir: /srv/application-server

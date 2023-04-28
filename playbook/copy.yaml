@@ -1,0 +1,61 @@
+- name: Copy files to server
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - name: Create a directory if it does not exist
+      file:
+        path: /srv/application-server
+        state: directory
+        mode: '0755'
+
+    - name: Remove docker directory
+      file:
+        path: /srv/application-server/docker
+        state: absent
+
+    - name: Copy docker directory
+      copy:
+        src: ../docker
+        dest: /srv/application-server
+
+    - name: Copy docker-compose.yaml
+      copy:
+        src: ../docker-compose.yaml
+        dest: /srv/application-server
+
+    - name: Copy keygen.yaml
+      copy:
+        src: ../keygen.yaml
+        dest: /srv/application-server
+
+    - name: Setup entrypoint permissions
+      shell: |
+        chmod u+x docker/ever-node/keygen docker/ever-node/entrypoint
+      args:
+        chdir: /srv/application-server
+
+    - name: Up docker containers
+      shell: |
+        rm -f .env
+
+        echo TRAEFIK_DOMAIN="{{ TRAEFIK_DOMAIN }}" >> .env
+        echo TRAEFIL_ACME_EMAIL="{{ TRAEFIL_ACME_EMAIL }}" >> .env
+        echo TRAEFIK_METRICS_DOMAIN="{{ TRAEFIK_METRICS_DOMAIN }}" >> .env
+        echo TEMPO_DOMAIN="{{ TEMPO_DOMAIN }}" >> .env
+        echo ARANGO_DOMAIN="{{ ARANGO_DOMAIN }}" >> .env
+        echo SCHEMA_REGISTRY_DOMAIN="{{ SCHEMA_REGISTRY_DOMAIN }}" >> .env
+        echo STATSD_DOMAIN="{{ STATSD_DOMAIN }}" >> .env
+        echo Q_SERVER_DOMAIN="{{ Q_SERVER_DOMAIN }}" >> .env
+        
+        echo ARANGO_ROOT_PASSWORD="{{ ARANGO_ROOT_PASSWORD }}" >> .env
+        echo ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY="{{ ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY }}" >> .env
+        
+        echo EVER_NODE_CONSOLE_SERVER_PORT="{{ EVER_NODE_CONSOLE_SERVER_PORT }}" >> .env
+        echo EVER_NODE_VALIDATOR_NAME="{{ EVER_NODE_VALIDATOR_NAME }}" >> .env
+        echo EVER_NODE_ADNL_PORT="{{ EVER_NODE_ADNL_PORT }}" >> .env
+        
+        touch .htpasswd
+        htpasswd -bB .htpasswd "{{ BASIC_AUTH_USER }}" "{{ BASIC_AUTH_PASSWORD }}"
+      args:
+        chdir: /srv/application-server

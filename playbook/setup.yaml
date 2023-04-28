@@ -1,4 +1,4 @@
-- name: Setup
+- name: Setup OS. Install packages using apt
   hosts: all
   remote_user: root
 
@@ -13,6 +13,10 @@
 
     - name: Auto remove
       shell: apt autoremove -y
+
+    - name: Install apache2-utils for "htpasswd" command
+      apt:
+        name: apache2-utils
 
     - name: Install ca-certificates, curl, gnupg and lsb-release for Docker
       apt:

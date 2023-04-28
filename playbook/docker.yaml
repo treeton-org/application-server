@@ -1,0 +1,10 @@
+- name: Create docker networks and volumes
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - name: Create traefik network
+      shell: docker network create traefik
+
+    - name: Create ever-node-configs volume
+      shell: docker volume create ever-node-configs
