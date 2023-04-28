@@ -152,7 +152,7 @@ flowchart TD
             connect(Connect)
             zookeeper~~~kafka
             connect~~~connect-init & zookeeper
-            connect===|3. Read data from kafka|kafka
+            connect---|3. Read data from kafka|kafka
             connect-init~~~kafka
             schema-registry~~~kafka & connect
         end
