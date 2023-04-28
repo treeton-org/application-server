@@ -42,7 +42,7 @@ docker compose -f docker-compose-jars.yaml up
 flowchart TD
     subgraph Metrics
         VictoriaMetrics
-        NodeExporter
+        Exporters
         Grafana
     end
 
@@ -58,9 +58,9 @@ flowchart TD
             tempo---grafana
         end
 
-        subgraph NodeExporter
+        subgraph Exporters
             node-exporter(Node exporter)
-            node-exporter
+            cadvisor(Cadvisor)
         end
 
     subgraph Application
@@ -73,9 +73,11 @@ flowchart TD
             zookeeper(Zookeeper)
             kafka(Kafka)
             schema-registry(Schema Registry)
+            connect-init(Connect init)
             connect(Connect)
             zookeeper---kafka
-            connect---zookeeper & kafka
+            connect---connect-init & zookeeper & kafka
+            connect-init---kafka
             schema-registry---kafka & connect
         end
 
@@ -98,11 +100,11 @@ flowchart TD
     traefik(Traefik)
 
     user---|HTTP|traefik
-    traefik-.-arangodb & tempo & schema-registry & vmagent & victoria-metrics & q-server & statsd & node-exporter & grafana
+    traefik-.-arangodb & tempo & schema-registry & vmagent & victoria-metrics & q-server & statsd & node-exporter & cadvisor & grafana
     kafka---ever-node
     connect---arangodb
     q-server---kafka
-    vmagent-----grafana & statsd & node-exporter & arangodb
+    vmagent-----grafana & statsd & node-exporter & cadvisor & arangodb
     victoria-metrics---grafana
 ```
 
@@ -111,7 +113,7 @@ Main workflow reading data from blockchain
 flowchart TD
     subgraph Metrics
         VictoriaMetrics
-        NodeExporter
+        Exporters
         Grafana
     end
 
@@ -127,9 +129,9 @@ flowchart TD
             tempo~~~grafana
         end
 
-        subgraph NodeExporter
+        subgraph Exporters
             node-exporter(Node exporter)
-            node-exporter
+            cadvisor(Cadvisor)
         end
 
     subgraph Application
@@ -142,10 +144,12 @@ flowchart TD
             zookeeper(Zookeeper)
             kafka(Kafka)
             schema-registry(Schema Registry)
+            connect-init(Connect init)
             connect(Connect)
             zookeeper~~~kafka
-            connect~~~zookeeper
+            connect~~~connect-init & zookeeper
             connect===|3. Read data from kafka|kafka
+            connect-init~~~kafka
             schema-registry~~~kafka & connect
         end
 
@@ -168,11 +172,11 @@ flowchart TD
     traefik(Traefik)
 
     user---|5. HTTP query|traefik
-    traefik~~~arangodb & tempo & schema-registry & vmagent & victoria-metrics & statsd & node-exporter & grafana
+    traefik~~~arangodb & tempo & schema-registry & vmagent & victoria-metrics & statsd & node-exporter & cadvisor & grafana
     traefik---|6. Proxy redirect|q-server
     kafka---|2. Parsed data: blocks, accounts, messages, transaction|ever-node
     connect---|4. Store data|arangodb
     q-server~~~kafka
-    vmagent~~~~~grafana & statsd & node-exporter & arangodb
+    vmagent~~~~~grafana & statsd & node-exporter & cadvisor & arangodb
     victoria-metrics~~~grafana
 ```
