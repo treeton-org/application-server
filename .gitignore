@@ -1,3 +1,11 @@
-docker/ever-node/ton-global.config.json
+# Project environments
 .env
+
+# HTTP Basic Auth protection
+.htpasswd
+
+# Blockchain network config
+docker/ever-node/ton-global.config.json
+
+# Ansible deploy server configuration
 playbook/inventory.yaml

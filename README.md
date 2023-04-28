@@ -12,17 +12,21 @@ Refactored copy of [evernode-ds](https://github.com/tonlabs/evernode-ds)
    ```shell
    cp .env.local .env
    ```
-3. Create network for external HTTP and volume for ever-node
+3. Copy `.htpasswd.example` to `.htpasswd` end edit. This file protect your metrics in production. Default user and password `admin:admin`
+   ```shell
+   cp .htpasswd.example .htpasswd
+   ```
+4. Create network for external HTTP and volume for ever-node
    ```shell
    docker network create traefik
    docker volume create ever-node-configs
    ```
-4. Generate ever-node key
+5. Generate ever-node key
    ```shell
    docker compose --env-file .env -f keygen.yaml up
    docker compose --env-file .env -f keygen.yaml down
    ```
-5. Up
+6. Up
    ```shell
    docker compose --env-file .env up
    ```
