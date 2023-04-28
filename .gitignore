@@ -1,2 +1,3 @@
 docker/ever-node/ton-global.config.json
 .env
+playbook/inventory.yaml

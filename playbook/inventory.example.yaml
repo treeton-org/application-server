@@ -1,0 +1,6 @@
+all:
+  hosts:
+    0.0.0.0:
+  vars:
+    ansible_ssh_user: 'root'
+    ansible_port: '22'
