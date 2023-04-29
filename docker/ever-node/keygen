@@ -42,15 +42,13 @@ jq -c .public "${CONSOLE_CLIENT_KEYS}" > "${CONSOLE_CLIENT_PUBLIC}"
 jq ".control_server_port = ${CONSOLE_SERVER_PORT}" "${DEFAULT_CONFIG}" > "${TMP_DEFAULT_CONFIG}"
 cp -rf "${TMP_DEFAULT_CONFIG}" "${DEFAULT_CONFIG}"
 
-# Remove config.json
-rm -rf "${CONFIG}"
-
 # Generate config.json using public key
 cd "${ROOT}" && "${ROOT}/ton_node" --configs "${CONFIGS}" --ckey "$(cat "${CONSOLE_CLIENT_PUBLIC}")" &
 sleep 10
 
 # Output generated config.json
 cat "${CONFIG}"
+cat "${CONSOLE_CONFIG}"
 
 # Save generated private key and generated console config into one file
 jq ".client_key = $(jq .private "${CONSOLE_CLIENT_KEYS}")" "${CONSOLE_CONFIG}" > "${TMP_CONSOLE_CONFIG}"
