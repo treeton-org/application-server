@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   keygen:
-    image: ghcr.io/treeton-org/ever-node:0.52.2
+    image: ghcr.io/treeton-org/ever-node:${EVER_NODE_TAG}
     container_name: ever-node
     environment:
       ADNL_PORT: ${EVER_NODE_ADNL_PORT}

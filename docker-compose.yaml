@@ -293,7 +293,7 @@ services:
   # Source code
   # @see https://github.com/tonlabs/ever-node
   ever-node:
-    image: ghcr.io/treeton-org/ever-node:0.52.2
+    image: ghcr.io/treeton-org/ever-node:${EVER_NODE_TAG}
     container_name: ever-node
     restart: always
     depends_on:
