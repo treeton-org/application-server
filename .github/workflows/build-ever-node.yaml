@@ -9,7 +9,8 @@ on:
 
 env:
   ORGANIZATION: treeton-org
-  EVER_NODE_COMMIT: 0.52.2
+  # 0.53.0
+  EVER_NODE_COMMIT: eec4214efdeccdbdff8c4e671bcebec2e575d54c
   EVER_NODE_TOOLS_COMMIT: master
 
 jobs:
