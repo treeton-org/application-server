@@ -8,7 +8,7 @@ ARG TON_Q_SERVER_COMMIT
 ENV TON_Q_SERVER_PATH=/q-server
 
 # Clone ton-q-server
-RUN git clone --recursive ${TON_Q_SERVER_REPOSITORY} ${TON_Q_SERVER_PATH}
+RUN git clone --recursive "${TON_Q_SERVER_REPOSITORY}" ${TON_Q_SERVER_PATH}
 RUN git -C ${TON_Q_SERVER_PATH} checkout ${TON_Q_SERVER_COMMIT}
 
 # Installation

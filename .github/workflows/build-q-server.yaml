@@ -9,7 +9,7 @@ on:
 
 env:
   ORGANIZATION: treeton-org
-  TON_Q_SERVER_REPOSITORY: https://github.com/tonlabs/ton-q-server
+  TON_Q_SERVER_REPOSITORY: "https://github.com/tonlabs/ton-q-server"
   TON_Q_SERVER_COMMIT: 0.55.1
 
 jobs:
@@ -45,5 +45,5 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            TON_Q_SERVER_REPOSITORY: ${{ env.TON_Q_SERVER_REPOSITORY }}
-            TON_Q_SERVER_COMMIT: ${{ env.TON_Q_SERVER_COMMIT }}
+            TON_Q_SERVER_REPOSITORY=${{ env.TON_Q_SERVER_REPOSITORY }}
+            TON_Q_SERVER_COMMIT=${{ env.TON_Q_SERVER_COMMIT }}
