@@ -54,8 +54,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            EVER_NODE_REPOSITORY: ${{ env.EVER_NODE_REPOSITORY }}
-            EVER_NODE_COMMIT: ${{ env.EVER_NODE_COMMIT }}
-            EVER_NODE_TOOLS_REPOSITORY: ${{ env.EVER_NODE_TOOLS_REPOSITORY }}
-            EVER_NODE_TOOLS_COMMIT: ${{ env.EVER_NODE_TOOLS_COMMIT }}
-            FEATURES: ${{ matrix.features }}
+            EVER_NODE_REPOSITORY=${{ env.EVER_NODE_REPOSITORY }}
+            EVER_NODE_COMMIT=${{ env.EVER_NODE_COMMIT }}
+            EVER_NODE_TOOLS_REPOSITORY=${{ env.EVER_NODE_TOOLS_REPOSITORY }}
+            EVER_NODE_TOOLS_COMMIT=${{ env.EVER_NODE_TOOLS_COMMIT }}
+            FEATURES=${{ matrix.features }}
