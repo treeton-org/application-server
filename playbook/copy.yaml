@@ -53,6 +53,7 @@
         echo EVER_NODE_CONSOLE_SERVER_PORT="{{ EVER_NODE_CONSOLE_SERVER_PORT }}" >> .env
         echo EVER_NODE_VALIDATOR_NAME="{{ EVER_NODE_VALIDATOR_NAME }}" >> .env
         echo EVER_NODE_ADNL_PORT="{{ EVER_NODE_ADNL_PORT }}" >> .env
+        echo EVER_NODE_MEMORY_LIMIT="{{ EVER_NODE_MEMORY_LIMIT }}" >> .env
         
         touch .htpasswd
         htpasswd -bB .htpasswd "{{ BASIC_AUTH_USER }}" "{{ BASIC_AUTH_PASSWORD }}"
