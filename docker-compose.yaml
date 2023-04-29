@@ -310,8 +310,10 @@ services:
       MEM_LIMIT: ${EVER_NODE_MEMORY_LIMIT}
     volumes:
       - ./docker/ever-node/entrypoint:/ever-node/entrypoint:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
       - ever-node-configs:/ever-node/configs
-      - ever-node-db:/ever-node/node_db
+      - ever-node-db:/ever-node/db
       - ever-node-logs:/ever-node/logs
     entrypoint: /ever-node/entrypoint
     networks:
@@ -413,6 +415,8 @@ networks:
     external: true
     name: traefik
   application:
+    external: true
+    name: application
 
 volumes:
   traefik-acme:

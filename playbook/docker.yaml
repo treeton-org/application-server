@@ -6,5 +6,8 @@
     - name: Create traefik network
       shell: docker network create traefik || true
 
+    - name: Create application network
+      shell: docker network create application || true
+
     - name: Create ever-node-configs volume
       shell: docker volume create ever-node-configs || true

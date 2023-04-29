@@ -57,6 +57,7 @@ ansible-playbook -i playbook/inventory.yaml playbook/update.yaml
 4. Create network for external HTTP and volume for ever-node
    ```shell
    docker network create traefik
+   docker network create application
    docker volume create ever-node-configs
    ```
 5. Generate ever-node key
