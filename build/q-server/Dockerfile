@@ -1,8 +1,8 @@
 FROM node:18-buster as X
 
 # Arguments
-ARG TON_Q_SERVER_REPOSITORY="https://github.com/tonlabs/ton-q-server"
-ARG TON_Q_SERVER_COMMIT=0.55.1
+ARG TON_Q_SERVER_REPOSITORY
+ARG TON_Q_SERVER_COMMIT
 
 # Environments
 ENV TON_Q_SERVER_PATH=/q-server

@@ -293,7 +293,7 @@ services:
   # Source code
   # @see https://github.com/tonlabs/ever-node
   ever-node:
-    image: ghcr.io/treeton-org/ever-node:${EVER_NODE_TAG}
+    image: ${EVER_NODE_IMAGE}
     container_name: ever-node
     restart: always
     depends_on:
@@ -374,7 +374,7 @@ services:
   # Documentation
   # @see https://github.com/tonlabs/ton-q-server#setup
   q-server:
-    image: ghcr.io/treeton-org/q-server:0.55.1
+    image: ${Q_SERVER_IMAGE}
     container_name: q-server
     restart: always
     environment:

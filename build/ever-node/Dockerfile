@@ -4,11 +4,11 @@
 FROM ubuntu:18.04 as build
 
 # Arguments
-ARG EVER_NODE_REPOSITORY=https://github.com/tonlabs/ever-node
-ARG EVER_NODE_COMMIT=0.52.2
-ARG EVER_NODE_TOOLS_REPOSITORY=https://github.com/tonlabs/ever-node-tools
-ARG EVER_NODE_TOOLS_COMMIT=master
-ARG FEATURES="external_db,metrics"
+ARG EVER_NODE_REPOSITORY
+ARG EVER_NODE_COMMIT
+ARG EVER_NODE_TOOLS_REPOSITORY
+ARG EVER_NODE_TOOLS_COMMIT
+ARG FEATURES
 
 # Environments
 ENV TIME_ZONE=Europe/Moscow

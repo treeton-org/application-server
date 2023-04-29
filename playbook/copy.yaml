@@ -54,7 +54,10 @@
         echo EVER_NODE_VALIDATOR_NAME="{{ EVER_NODE_VALIDATOR_NAME }}" >> .env
         echo EVER_NODE_ADNL_PORT="{{ EVER_NODE_ADNL_PORT }}" >> .env
         echo EVER_NODE_MEMORY_LIMIT="{{ EVER_NODE_MEMORY_LIMIT }}" >> .env
-        echo EVER_NODE_TAG="{{ EVER_NODE_TAG }}" >> .env
+        echo EVER_NODE_IMAGE="{{ EVER_NODE_IMAGE }}" >> .env
+        echo EVER_NODE_IMAGE="{{ EVER_NODE_IMAGE }}" >> .env
+        
+        echo Q_SERVER_IMAGE="{{ Q_SERVER_IMAGE }}" >> .env
         
         touch .htpasswd
         htpasswd -bB .htpasswd "{{ BASIC_AUTH_USER }}" "{{ BASIC_AUTH_PASSWORD }}"

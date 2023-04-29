@@ -20,7 +20,9 @@ all:
     EVER_NODE_VALIDATOR_NAME: VALIDATOR
     EVER_NODE_ADNL_PORT: 30303
     EVER_NODE_MEMORY_LIMIT: 64G
-    EVER_NODE_TAG: eec4214efdeccdbdff8c4e671bcebec2e575d54c
+    EVER_NODE_IMAGE: "ghcr.io/treeton-org/ever-node:eec4214efdeccdbdff8c4e671bcebec2e575d54c"
+
+    Q_SERVER_IMAGE: "ghcr.io/treeton-org/q-server:0.55.1"
 
     BASIC_AUTH_USER: admin
     BASIC_AUTH_PASSWORD: admin
