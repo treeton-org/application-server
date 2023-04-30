@@ -3,7 +3,7 @@
     "ton_global_config_name": "ton-global.config.json",
     "use_global_config": true,
     "internal_db_path": "/ever-node/db",
-    "ip_address": "0.0.0.0:30303",
+    "ip_address": "0.0.0.0:49999",
     "overlay_peers": [],
     "shard_keeper": {
         "get_peer_attempt_timeout_ms": 1000,

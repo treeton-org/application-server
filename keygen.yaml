@@ -19,7 +19,7 @@ services:
       - ./docker/ever-node/ton-global.config.json:/ever-node/ton-global.config.json:ro
       - ./docker/ever-node/keygen:/ever-node/keygen:ro
       - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
+#      - /etc/timezone:/etc/timezone:ro
       - ever-node-configs:/ever-node/configs
       - ever-node-db:/ever-node/db
       - ever-node-logs:/ever-node/logs

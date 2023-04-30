@@ -311,7 +311,7 @@ services:
     volumes:
       - ./docker/ever-node/entrypoint:/ever-node/entrypoint:ro
       - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
+#      - /etc/timezone/:/etc/timezone/:ro
       - ever-node-configs:/ever-node/configs
       - ever-node-db:/ever-node/db
       - ever-node-logs:/ever-node/logs
