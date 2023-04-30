@@ -47,6 +47,11 @@ loggers:
     additive: false
     appenders:
       - logfile
+  storage:
+    level: info
+    additive: false
+    appenders:
+      - logfile
 
   # adnl messages
   adnl:
