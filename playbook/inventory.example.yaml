@@ -5,13 +5,13 @@ all:
     ansible_ssh_user: 'root'
     ansible_port: '22'
 
-    TRAEFIK_DOMAIN: traefik.main.treeton.localhost
-    TRAEFIL_ACME_EMAIL: traefik@main.treeton.localhost
-    TRAEFIK_METRICS_DOMAIN: metrics.traefik.main.treeton.localhost
-    TEMPO_DOMAIN: tempo.main.treeton.localhost
-    ARANGO_DOMAIN: arango.main.treeton.localhost
-    STATSD_DOMAIN: statsd.main.treeton.localhost
-    Q_SERVER_DOMAIN: main.treeton.localhost
+    TRAEFIK_DOMAIN: traefik.gql.treeton.localhost
+    TRAEFIL_ACME_EMAIL: traefik@gql.treeton.localhost
+    TRAEFIK_METRICS_DOMAIN: metrics.traefik.gql.treeton.localhost
+    TEMPO_DOMAIN: tempo.gql.treeton.localhost
+    ARANGO_DOMAIN: arango.gql.treeton.localhost
+    STATSD_DOMAIN: statsd.gql.treeton.localhost
+    Q_SERVER_DOMAIN: gql.treeton.localhost
 
     ARANGO_ROOT_PASSWORD: 123
     ARANGODB_OVERRIDE_DETECTED_TOTAL_MEMORY: 32G
