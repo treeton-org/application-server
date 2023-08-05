@@ -10,9 +10,9 @@ on:
 env:
   ORGANIZATION: treeton-org
   EVER_NODE_REPOSITORY: https://github.com/tonlabs/ever-node
-  EVER_NODE_COMMIT: eec4214efdeccdbdff8c4e671bcebec2e575d54c
+  EVER_NODE_COMMIT: 8a5d0668647ac6e52f3d649c163bc71c005051d1
   EVER_NODE_TOOLS_REPOSITORY: https://github.com/tonlabs/ever-node-tools
-  EVER_NODE_TOOLS_COMMIT: master
+  EVER_NODE_TOOLS_COMMIT: 2ca433dddd7e860d388f89a54e8a2cb8a7c54758
 
 jobs:
   build:
